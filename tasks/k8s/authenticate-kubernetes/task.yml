@@ -1,0 +1,22 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines
+    tag: 0.1
+    
+params:
+  PKS_CLUSTER_NAME:
+
+inputs:
+  - name: cowboy-pipelines
+  - name: pks-config
+
+outputs:
+  - name: kube-config
+  
+run:
+  path: cowboy-pipelines/tasks/k8s/authenticate-kubernetes/task.sh

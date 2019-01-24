@@ -1,0 +1,21 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines:v1
+    tag: 0.1
+
+params:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  OPS_MGR_USR:
+  OPS_MGR_PWD:
+  OM_DECRYPTION_PWD:
+
+inputs:
+  - name: cowboy-pipelines
+
+run:
+  path: cowboy-pipelines/tasks/ops-man/config-pivotal-ops-manager-auth/task.sh

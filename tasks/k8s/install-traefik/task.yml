@@ -1,0 +1,20 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines
+    tag: 0.1
+    
+inputs:
+  - name: cowboy-pipelines
+  - name: kube-config
+
+params:
+  TRAEFIK_IMAGE:
+  TRAEFIK_INGRESS_DNS:
+
+run:
+  path: cowboy-pipelines/tasks/k8s/install-traefik/task.sh

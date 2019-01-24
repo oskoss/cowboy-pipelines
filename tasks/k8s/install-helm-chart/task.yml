@@ -1,0 +1,23 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines
+    tag: 0.1
+
+params:
+  RELEASE_NAME:
+  CHART_NAME:
+  CHART_VALUES:
+  NAMESPACE:
+
+inputs:
+  - name: cowboy-pipelines
+  - name: kube-config
+  - name: charts
+
+run:
+  path: cowboy-pipelines/tasks/k8s/install-helm-chart/task.sh

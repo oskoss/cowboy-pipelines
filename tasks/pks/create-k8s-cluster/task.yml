@@ -1,0 +1,22 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines
+    tag: 0.1
+
+params:
+
+  CLUSTER_NAME:
+  CLUSTER_PLAN:
+  CLUSTER_FQDN:
+
+inputs:
+  - name: cowboy-pipelines
+  - name: pks-config
+
+run:
+  path: cowboy-pipelines/tasks/pks/create-k8s-cluster/task.sh

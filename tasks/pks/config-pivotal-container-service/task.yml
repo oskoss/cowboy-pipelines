@@ -1,0 +1,37 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines
+    tag: 0.1
+
+inputs:
+  - name: cowboy-pipelines
+
+params: 
+  OPSMAN_USERNAME:
+  OPSMAN_PASSWORD:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  IAAS:
+  VCENTER_HOST:
+  VCENTER_USR:
+  VCENTER_PWD:
+  VCENTER_DATA_CENTER:
+  NETWORK_NAME:
+  SERVICE_NETWORK_NAME:
+  PKS_API:
+  PKS_VSPHERE_DATASTORE:
+  BOSH_VMS_FOLDER:
+  DEPLOYMENT_NW_AZS:
+  PKS_SSL_CERT1:
+  PKS_SSL_KEY1:
+  PKS_SINGLETON_JOB_AZ:
+  PKS_VRLI_ENABLED:
+  PKS_VRLI_FQDN:
+run:
+  path: cowboy-pipelines/tasks/pks/config-pivotal-container-service/task.sh

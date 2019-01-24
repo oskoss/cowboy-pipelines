@@ -1,0 +1,16 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines
+    tag: 0.1
+
+inputs:
+  - name: cowboy-pipelines
+  - name: kube-config
+
+run:
+  path: cowboy-pipelines/tasks/k8s/create-vsphere-default-storage-class/task.sh
+  

@@ -1,0 +1,20 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines
+    tag: 0.1
+
+params:
+  DNS_SERVER_IP:
+  DNS_HOSTNAME:
+
+inputs:
+  - name: cowboy-pipelines
+  - name: product-ip
+
+run:
+  path: cowboy-pipelines/tasks/util/set-dynamic-dns/task.sh

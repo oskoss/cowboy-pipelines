@@ -1,0 +1,23 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines
+    tag: 0.1
+
+params:
+  PKS_API_URL:
+  PKS_API_USERNAME:
+  PKS_API_PASSWORD:
+
+inputs:
+  - name: cowboy-pipelines
+
+outputs:
+  - name: pks-config
+  
+run:
+  path: cowboy-pipelines/tasks/pks/authenticate-pks/task.sh

@@ -1,0 +1,26 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines
+    tag: 0.1
+
+params:
+  OPSMAN_DOMAIN_OR_IP_ADDRESS:
+  OPSMAN_CLIENT_ID:
+  OPSMAN_CLIENT_SECRET:
+  OPS_MGR_USR:
+  OPS_MGR_PWD:
+  OPSMAN_PRODUCT_NAME:
+
+inputs:
+  - name: cowboy-pipelines
+
+outputs:
+  - name: product-ip
+
+run:
+  path: cowboy-pipelines/tasks/util/determine-product-ip/task.sh
