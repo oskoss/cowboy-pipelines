@@ -1,7 +1,7 @@
 
 # Grab BOSH Stemcell From BOSH.io
 
-1/23/2019 Ubuntu Xenial 170.23
+1/25/2019 Ubuntu Xenial 170.24
 
 # Extract BOSH Stemcell To Import into vSphere
 
@@ -146,4 +146,6 @@ docker push 10.127.45.122:5000/traefik:1.7.7
 
 Login to Gogs (Git Registry) via the VM IP and port 3000
 
-- clone 
+- change directory into `/data/pipelines`
+- `git clone https://github.com/Oskoss/cowboy-pipelines.git`
+
