@@ -3,8 +3,6 @@
 set -eo pipefail
 
 
-
-
 if [ -z "$DNS_IP" ]; then
   printf "No IP specified from ENV: \$DNS_IP"
   ls product-ip/ip

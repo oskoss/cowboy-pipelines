@@ -99,6 +99,24 @@ resources:
     repository: {{bootstrap_java_image}}
     tag: {{java_image_tag}}
     insecure_registries: [{{bootstrap_insecure_reg}}]
+- name: bootstrap-kafka-image
+  type: docker-image
+  source:
+    repository: {{bootstrap_kafka_image}}
+    tag: {{kafka_image_tag}}
+    insecure_registries: [{{bootstrap_insecure_reg}}]
+- name: bootstrap-zookeeper-image
+  type: docker-image
+  source:
+    repository: {{bootstrap_zookeeper_image}}
+    tag: {{zookeeper_image_tag}}
+    insecure_registries: [{{bootstrap_insecure_reg}}]
+- name: bootstrap-cassandra-image
+  type: docker-image
+  source:
+    repository: {{bootstrap_cassandra_image}}
+    tag: {{cassandra_image_tag}}
+    insecure_registries: [{{bootstrap_insecure_reg}}]
 - name: harbor-concourse-image
   type: docker-image
   source:
@@ -154,6 +172,24 @@ resources:
     password: {{platform_password}}
     repository: {{harbor_java_image}}
     tag: {{java_image_tag}}
+    insecure_registries: [{{harbor_insecure_reg}}]
+- name: harbor-kafka-image
+  type: docker-image
+  source:
+    repository: {{harbor_kafka_image}}
+    tag: {{kafka_image_tag}}
+    insecure_registries: [{{harbor_insecure_reg}}]
+- name: harbor-zookeeper-image
+  type: docker-image
+  source:
+    repository: {{harbor_zookeeper_image}}
+    tag: {{zookeeper_image_tag}}
+    insecure_registries: [{{harbor_insecure_reg}}]
+- name: harbor-cassandra-image
+  type: docker-image
+  source:
+    repository: {{harbor_cassandra_image}}
+    tag: {{cassandra_image_tag}}
     insecure_registries: [{{harbor_insecure_reg}}]
 
 jobs:
@@ -491,6 +527,15 @@ jobs:
       - get: bootstrap-java-image
         params:
           save: true
+      - get: bootstrap-kafka-image
+        params:
+          save: true
+      - get: bootstrap-zookeeper-image
+        params:
+          save: true
+      - get: bootstrap-cassandra-image
+        params:
+          save: true
     - aggregate:
       - task: harbor-create-concourse-project
         image: bootstrap-ci-image
@@ -555,6 +600,15 @@ jobs:
           HARBOR_USERNAME: admin
           HARBOR_PASSWORD: {{platform_password}}
           PUBLIC: true
+      - task: harbor-create-bitnami-project
+        image: bootstrap-ci-image
+        file: cowboy-pipelines/tasks/harbor/create-harbor-project/task.yml
+        params:
+          PROJECT_NAME: bitnami
+          HARBOR_FQDN: {{harbor_api}}
+          HARBOR_USERNAME: admin
+          HARBOR_PASSWORD: {{platform_password}}
+          PUBLIC: true
     - aggregate:
       - put: harbor-concourse-image
         params:
@@ -577,6 +631,15 @@ jobs:
       - put: harbor-java-image
         params:
           load: bootstrap-java-image
+      - put: harbor-kafka-image
+        params:
+          load: bootstrap-kafka-image
+      - put: harbor-zookeeper-image
+        params:
+          load: bootstrap-zookeeper-image
+      - put: harbor-cassandra-image
+        params:
+          load: bootstrap-cassandra-image
 - name: create-pks-admin-user
   plan:
     - aggregate:
