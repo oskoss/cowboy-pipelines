@@ -1,0 +1,22 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines
+    tag: 0.1
+
+params:
+  CONCOURSE_URL:
+  CONCOURSE_USERNAME:
+  CONCOURSE_PASSWORD:
+  CONCOURSE_PIPELINE:
+  CONCOURSE_JOB:
+
+inputs:
+  - name: cowboy-pipelines
+
+run:
+  path: cowboy-pipelines/tasks/util/trigger-concourse-pipeline/task.sh

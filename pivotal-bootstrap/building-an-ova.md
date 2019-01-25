@@ -126,8 +126,8 @@ docker push 10.127.45.122:5000/openjdk:8-jdk
 docker pull bitnami/zookeeper:3.4.13 
 docker tag bitnami/zookeeper:3.4.13  10.127.45.122:5000/bitnami/zookeeper:3.4.13
 docker push 10.127.45.122:5000/bitnami/zookeeper:3.4.13 
-docker pull bitnami/zookeeper:3.4.13 
-docker tag bitnami/zookeeper:3.4.13  10.127.45.122:5000/bitnami/cassandra:3.11.3
+docker pull bitnami/cassandra:3.11.3
+docker tag bitnami/cassandra:3.11.3  10.127.45.122:5000/bitnami/cassandra:3.11.3
 docker push 10.127.45.122:5000/bitnami/cassandra:3.11.3 
 docker pull bitnami/kafka:2.1.0
 docker tag bitnami/kafka:2.1.0 10.127.45.122:5000/bitnami/kafka:2.1.0
@@ -141,6 +141,9 @@ docker push 10.127.45.122:5000/oskoss/cowboy-pipelines:0.1
 docker pull traefik:1.7.7
 docker tag traefik:1.7.7 10.127.45.122:5000/traefik:1.7.7
 docker push 10.127.45.122:5000/traefik:1.7.7
+docker pull postgres:9.6.2
+docker tag postgres:9.6.2 10.127.45.122:5000/postgres:9.6.2
+docker push 10.127.45.122:5000/postgres:9.6.2
 
 # Sync the edge-platform repo to the OVA
 
@@ -148,4 +151,5 @@ Login to Gogs (Git Registry) via the VM IP and port 3000
 
 - change directory into `/data/pipelines`
 - `git clone https://github.com/Oskoss/cowboy-pipelines.git`
+
 

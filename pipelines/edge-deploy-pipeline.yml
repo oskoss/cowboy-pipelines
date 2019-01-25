@@ -31,7 +31,7 @@ resources:
 - name: pivotal-container-service
   type: s3
   source:
-    regexp: (.*).pivotal
+    regexp: pivotal-container-service-1.2.4-build.6.pivotal
     endpoint: {{minio_s3_endpoint}}
     bucket: pivotal-container-service
     disable_ssl: true
@@ -45,7 +45,7 @@ resources:
 - name: xenial-97.39
   type: s3
   source:
-    regexp: (.*).tgz
+    regexp: bosh-stemcell-97.39-vsphere-esxi-ubuntu-xenial-go_agent.tgz
     endpoint: {{minio_s3_endpoint}}
     bucket: xenial-stemcells
     disable_ssl: true
