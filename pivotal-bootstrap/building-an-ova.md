@@ -99,7 +99,26 @@ WantedBy=multi-user.target
 - Enable the script to be runable
 `chmod +x /usr/bin/pivotal-bootstrap`
 
+# Setup local files for inital deploy pipeline
+
+- create directory `mkdir /data/pipelines`
+- change directory `cd /data/pipelines`
+- `git clone https://github.com/Oskoss/cowboy-pipelines.git`
+
 # Add Pivotal Network Bits to Minio S3
+
+Start Minio Manually
+
+```
+mkdir -p /data/minio
+docker run -d \
+    -p 9000:9000 \
+    --restart=always \
+    -e "MINIO_ACCESS_KEY=vcap" \
+    -e "MINIO_SECRET_KEY=c1oudc0w" \
+    -v /data/minio:/data \
+    minio/minio:RELEASE.2019-01-16T21-44-08Z server /data
+```
 
 Navigate to the IP of the VM, port 9000
 Create buckets:
@@ -114,6 +133,21 @@ Upload artifacts.
 
 # Pull, Tag, Push Images to Docker Registry running on OVA
 
+Start Docker Registry Manually
+
+```
+mkdir -p /data/docker-registry
+docker run -d \
+    -p 5000:5000 \
+    --restart=always \
+    --name registry \
+    -v /data/docker-registry:/var/lib/registry \
+    registry:2.7.1
+```
+
+Move all images to docker-registry (if you do this locally you keep the bootstrap vm as lean as possible)
+
+```
 docker pull gcr.io/kubernetes-helm/tiller:v2.12.0
 docker tag gcr.io/kubernetes-helm/tiller:v2.12.0 10.127.45.122:5000/kubernetes-helm/tiller:v2.12.0
 docker push 10.127.45.122:5000/kubernetes-helm/tiller:v2.12.0
@@ -144,12 +178,138 @@ docker push 10.127.45.122:5000/traefik:1.7.7
 docker pull postgres:9.6.2
 docker tag postgres:9.6.2 10.127.45.122:5000/postgres:9.6.2
 docker push 10.127.45.122:5000/postgres:9.6.2
+```
 
 # Sync the edge-platform repo to the OVA
 
+Start Gogs (Git Registry) manually
+ - start postgres
+ - create gogs database in postgres
+ - start gogs
+
+```
+mkdir -p /data/postgres
+docker run -d \
+    -p 5432:5432 \
+    --restart=always \
+    --name=postgres \
+    -v /data/postgres:/data \
+    -e PGDATA=/data \
+    -e POSTGRES_USER=vcap \
+    -e POSTGRES_PASSWORD=c1oudc0w \
+    postgres:11.1
+
+docker run \
+-e "PGPASSWORD=c1oudc0w" \
+postgres \
+sh -c "psql -h 10.127.45.122 --username=vcap postgres -c 'CREATE DATABASE gogs'"
+
+rm -rf /data/git/gogs-repositories
+mkdir -p /data/gogs/gogs/conf
+mkdir -p /data/git/gogs-repositories
+
+cat << EOF > /data/gogs/gogs/conf/app.ini
+APP_NAME = Pivotal-Bootstrap
+RUN_USER = git
+RUN_MODE = prod
+
+[database]
+DB_TYPE  = postgres
+HOST     = 10.127.45.122:5432
+NAME     = gogs
+USER     = vcap
+PASSWD   = c1oudc0w
+SSL_MODE = disable
+PATH     = data/gogs.db
+
+[repository]
+ROOT = /data/git/gogs-repositories
+
+[server]
+DOMAIN           = localhost
+HTTP_PORT        = 3000
+ROOT_URL         = http://localhost:3000/
+DISABLE_SSH      = false
+SSH_PORT         = 22
+START_SSH_SERVER = false
+OFFLINE_MODE     = false
+
+[mailer]
+ENABLED = false
+
+[service]
+REGISTER_EMAIL_CONFIRM = false
+ENABLE_NOTIFY_MAIL     = false
+DISABLE_REGISTRATION   = false
+ENABLE_CAPTCHA         = true
+REQUIRE_SIGNIN_VIEW    = false
+
+[picture]
+DISABLE_GRAVATAR        = false
+ENABLE_FEDERATED_AVATAR = false
+
+[session]
+PROVIDER = file
+
+[log]
+MODE      = file
+LEVEL     = Info
+ROOT_PATH = /data/gogs/log
+
+[security]
+INSTALL_LOCK = true
+SECRET_KEY   = HrC5t3OxbrbnBhJ
+EOF
+
+docker run -d \
+    --name=gogs \
+    -p 10022:22 \
+    -p 3000:3000 \
+    -v /data/gogs:/data \
+    gogs/gogs:0.11.79
+```
+
+Create the vcap user
+
+`docker exec gogs sh -c "su -c \"/app/gogs/gogs admin create-user --name=vcap --password=c1oudc0w --email=no-reply@pivotal.io --admin=true\" git"`
+
+
 Login to Gogs (Git Registry) via the VM IP and port 3000
 
-- change directory into `/data/pipelines`
-- `git clone https://github.com/Oskoss/cowboy-pipelines.git`
+Create cowboy-pipelines repo
+
+Add repo locally and push to the above local repo
+
+```
+cd /data/pipelines/cowboy-pipelines
+git remote add local http://localhost:3000/vcap/cowboy-pipelines.git
+git push local
+```
+
+# Free up space
+
+- First on the root 10gb drive
+```
+dd if=/dev/zero of=/zeroes
+rm -f /zeros
+```
+
+- Second on the data 110gb drive
+```
+dd if=/dev/zero of=/data/zeroes
+rm -f /data/zeros
+```
+
+- Shutdown the VM
+
+- SSH to the esxi server
+
+
+
+
+
+
+
+
 
 
