@@ -376,6 +376,8 @@ bitnami_kafka_image_tag: 2.1.0
 bitnami_zookeeper_image_tag: 3.4.13
 bitnami_cassandra_image_tag: 3.11.3
 
+traefik_helm_repo: http://$HARBOR_FQDN/chartrepo/traefik
+concourse_helm_repo: http://$HARBOR_FQDN/chartrepo/concourse
 traefik_chart_values: "dashboard.enabled=true,serviceType=NodePort,image=$HARBOR_FQDN/traefik/traefik,imageTag=1.7.7,accessLogs.enabled=true,dashboard.domain=traefik.$CONTROL_CLUSTER_FQDN,rbac.enabled=true"
 concourse_chart_values: "image=$HARBOR_FQDN/concourse/concourse,web.ingress.enabled=true,web.ingress.hosts[0]=concourse.$CONTROL_CLUSTER_FQDN,postgresql.image=$HARBOR_FQDN/postgres/postgres,postgresql.imageTag=9.6.2"
 EOF
