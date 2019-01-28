@@ -49,6 +49,48 @@ resources:
     endpoint: {{minio_s3_endpoint}}
     bucket: xenial-stemcells
     disable_ssl: true
+- name: postgresql-chart
+  type: s3
+  source:
+    regexp: postgresql-0.13.1.tar
+    endpoint: {{minio_s3_endpoint}}
+    bucket: charts
+    disable_ssl: true
+- name: concourse-chart
+  type: s3
+  source:
+    regexp: concourse-3.7.1.tgz
+    endpoint: {{minio_s3_endpoint}}
+    bucket: charts
+    disable_ssl: true
+- name: traefik-chart
+  type: s3
+  source:
+    regexp: traefik-1.59.0.tgz
+    endpoint: {{minio_s3_endpoint}}
+    bucket: charts
+    disable_ssl: true
+- name: bitnami-cassandra-chart
+  type: s3
+  source:
+    regexp: cassandra-2.1.2.tgz
+    endpoint: {{minio_s3_endpoint}}
+    bucket: charts
+    disable_ssl: true
+- name: bitnami-zookeeper-chart
+  type: s3
+  source:
+    regexp: zookeeper-1.2.1.tgz
+    endpoint: {{minio_s3_endpoint}}
+    bucket: charts
+    disable_ssl: true
+- name: bitnami-kafka-chart
+  type: s3
+  source:
+    regexp: kafka-1.2.6.tgz
+    endpoint: {{minio_s3_endpoint}}
+    bucket: charts
+    disable_ssl: true
 - name: cowboy-pipelines
   type: git
   source:
@@ -639,6 +681,66 @@ jobs:
       - put: harbor-cassandra-image
         params:
           load: bootstrap-cassandra-image
+    - get: chart-tar
+      resource: postgresql-chart
+    - task: harbor-upload-postgresql-chart
+      image: bootstrap-ci-image
+      file: cowboy-pipelines/tasks/harbor/create-harbor-project/task.yml
+      params:
+        PROJECT_NAME: postgresql
+        HARBOR_FQDN: {{harbor_api}}
+        HARBOR_USERNAME: admin
+        HARBOR_PASSWORD: {{platform_password}}
+    - get: chart-tar
+      resource: concourse-chart
+    - task: harbor-upload-concourse-chart
+      image: bootstrap-ci-image
+      file: cowboy-pipelines/tasks/harbor/create-harbor-project/task.yml
+      params:
+        PROJECT_NAME: concourse
+        HARBOR_FQDN: {{harbor_api}}
+        HARBOR_USERNAME: admin
+        HARBOR_PASSWORD: {{platform_password}}
+    - get: chart-tar
+      resource: traefik-chart
+    - task: harbor-upload-traefik-chart
+      image: bootstrap-ci-image
+      file: cowboy-pipelines/tasks/harbor/create-harbor-project/task.yml
+      params:
+        PROJECT_NAME: traefik
+        HARBOR_FQDN: {{harbor_api}}
+        HARBOR_USERNAME: admin
+        HARBOR_PASSWORD: {{platform_password}}
+    - get: chart-tar
+      resource: bitnami-kafka-chart
+    - task: harbor-upload-kafka-chart
+      image: bootstrap-ci-image
+      file: cowboy-pipelines/tasks/harbor/create-harbor-project/task.yml
+      params:
+        PROJECT_NAME: bitnami
+        HARBOR_FQDN: {{harbor_api}}
+        HARBOR_USERNAME: admin
+        HARBOR_PASSWORD: {{platform_password}}
+    - get: chart-tar
+      resource: bitnami-zookeeper-chart
+    - task: harbor-upload-zookeeper-chart
+      image: bootstrap-ci-image
+      file: cowboy-pipelines/tasks/harbor/create-harbor-project/task.yml
+      params:
+        PROJECT_NAME: bitnami
+        HARBOR_FQDN: {{harbor_api}}
+        HARBOR_USERNAME: admin
+        HARBOR_PASSWORD: {{platform_password}}
+    - get: chart-tar
+      resource: bitnami-cassandra-chart
+    - task: harbor-upload-cassandra-chart
+      image: bootstrap-ci-image
+      file: cowboy-pipelines/tasks/harbor/create-harbor-project/task.yml
+      params:
+        PROJECT_NAME: bitnami
+        HARBOR_FQDN: {{harbor_api}}
+        HARBOR_USERNAME: admin
+        HARBOR_PASSWORD: {{platform_password}}
 - name: create-pks-admin-user
   plan:
     - aggregate:

@@ -20,11 +20,10 @@ TMPXML='/tmp/ovf_env.xml'
 IP=`cat $TMPXML| grep -w ip |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
 NETMASK=`cat $TMPXML| grep -w netmask |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
 GW=`cat $TMPXML| grep -w gateway |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-HOSTNAME=`cat $TMPXML| grep -w hostname |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
 DNS=`cat $TMPXML| grep -w dns |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
 
 # Update network
-printf "\n IP: $IP \n Netmask: $NETMASK \n Gateway: $GW \n Hostname: $HOSTNAME \n DNS: $DNS \n" >>$STATE
+printf "\n IP: $IP \n Netmask: $NETMASK \n Gateway: $GW \n DNS: $DNS \n" >>$STATE
 
 cat << EOF > /etc/network/interfaces
 # The loopback network interface  
