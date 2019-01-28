@@ -824,6 +824,7 @@ jobs:
       CHART_NAME: traefik
       CHART_VALUES: {{traefik_chart_values}}
       NAMESPACE: kube-system
+      HELM_REPO_URL: {{traefik_helm_repo}}
   - task: install-concourse
     image: bootstrap-ci-image
     file: cowboy-pipelines/tasks/k8s/install-helm-chart/task.yml
@@ -831,4 +832,5 @@ jobs:
       RELEASE_NAME: control-cluster-concourse
       CHART_NAME: concourse
       CHART_VALUES: {{concourse_chart_values}}
+      HELM_REPO_URL: {{concourse_helm_repo}}
       
