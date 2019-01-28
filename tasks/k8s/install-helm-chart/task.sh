@@ -19,7 +19,7 @@ kubectl create namespace $RELEASE_NAME || true
 kubectl config set-context $currentContext --namespace=$NAMESPACE
 kubectl config use-context $currentContext
 
-helm init --client-only
+helm init --client-only --skip-refresh
 cd charts/stable
 
 printf "Chart Values: \n $CHART_VALUES"
