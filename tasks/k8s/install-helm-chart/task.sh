@@ -19,8 +19,18 @@ kubectl create namespace $RELEASE_NAME || true
 kubectl config set-context $currentContext --namespace=$NAMESPACE
 kubectl config use-context $currentContext
 
-helm init --client-only --skip-refresh
-cd charts/stable
+
+
+if [ -z "$HELM_REPO_URL" ]
+then
+  printf "No Helm Repo specified, defaulting to stable -- internet access required"
+  helm_repo_name="stable"
+  helm init --client-only
+else
+  printf "Helm Repo specified as $HELM_REPO_URL adding repo"
+  helm_repo_name="ciHelmRepo"
+  helm init --client-only --skip-refresh
+  helm repo add $helm_repo_name $HELM_REPO_URL
 
 printf "Chart Values: \n $CHART_VALUES"
 
@@ -32,4 +42,4 @@ else
 fi
 
 # Install the Chart
-helm upgrade $RELEASE_NAME stable/$CHART_NAME --namespace $NAMESPACE --install $HELM_OPTIONS --debug
+helm upgrade $RELEASE_NAME $helm_repo_name/$CHART_NAME --namespace $NAMESPACE --install $HELM_OPTIONS --debug
