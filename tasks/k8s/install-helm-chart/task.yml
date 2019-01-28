@@ -13,11 +13,11 @@ params:
   CHART_NAME:
   CHART_VALUES:
   NAMESPACE:
+  HELM_REPO_URL:
 
 inputs:
   - name: cowboy-pipelines
   - name: kube-config
-  - name: charts
-
+  
 run:
   path: cowboy-pipelines/tasks/k8s/install-helm-chart/task.sh
