@@ -19,7 +19,7 @@ groups:
   - sync-traefik-helm-chart
   - sync-kafka-helm-chart
   - sync-cassandra-helm-chart
-  - sync-postgresql-zookeeper-chart
+  - sync-zookeeper-chart
   - create-pks-admin-user
 - name: Control Kubernetes Cluster
   jobs:
@@ -721,7 +721,7 @@ jobs:
           HARBOR_FQDN: {{harbor_api}}
           HARBOR_USERNAME: admin
           HARBOR_PASSWORD: {{platform_password}}
-          TAR_FILENAME: concourse-3.7.1.tgz
+          TAR_FILENAME: concourse-3.7.1.tar
 - name: sync-traefik-helm-chart
   plan:
       - get: cowboy-pipelines
@@ -738,7 +738,7 @@ jobs:
           HARBOR_FQDN: {{harbor_api}}
           HARBOR_USERNAME: admin
           HARBOR_PASSWORD: {{platform_password}}
-          TAR_FILENAME: traefik-1.59.2.tgz
+          TAR_FILENAME: traefik-1.59.2.tar
 - name: sync-kafka-helm-chart
   plan:
       - get: cowboy-pipelines
@@ -756,7 +756,7 @@ jobs:
           HARBOR_USERNAME: admin
           HARBOR_PASSWORD: {{platform_password}}
           TAR_FILENAME: kafka-1.2.6.tgz
-- name: sync-postgresql-zookeeper-chart
+- name: sync-zookeeper-chart
   plan:
       - get: cowboy-pipelines
       - get: chart-tar
