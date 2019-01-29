@@ -58,42 +58,42 @@ resources:
 - name: postgresql-helm-chart
   type: s3
   source:
-    regexp: postgresql.*\.(tgz$)|(tar\.gz$)|(tar$)
+    regexp: postgresql.*\.(tar.gz|tgz|tar)
     endpoint: {{minio_s3_endpoint}}
     bucket: charts
     disable_ssl: true
 - name: zookeeper-helm-chart
   type: s3
   source:
-    regexp: zookeeper.*\.(tgz$)|(tar\.gz$)|(tar$)
+    regexp: zookeeper.*\.(tar.gz|tgz|tar)
     endpoint: {{minio_s3_endpoint}}
     bucket: charts
     disable_ssl: true
 - name: cassandra-helm-chart
   type: s3
   source:
-    regexp: cassandra.*\.(tgz$)|(tar\.gz$)|(tar$)
+    regexp: cassandra.*\.(tar.gz|tgz|tar)
     endpoint: {{minio_s3_endpoint}}
     bucket: charts
     disable_ssl: true
 - name: kafka-helm-chart
   type: s3
   source:
-    regexp: kafka.*\.(tgz$)|(tar\.gz$)|(tar$)
+    regexp: kafka.*\.(tar.gz|tgz|tar)
     endpoint: {{minio_s3_endpoint}}
     bucket: charts
     disable_ssl: true
 - name: concourse-helm-chart
   type: s3
   source:
-    regexp: concourse.*\.(tgz$)|(tar\.gz$)|(tar$)
+    regexp: concourse.*\.(tar.gz|tgz|tar)
     endpoint: {{minio_s3_endpoint}}
     bucket: charts
     disable_ssl: true
 - name: traefik-helm-chart
   type: s3
   source:
-    regexp: traefik.*\.(tgz$)|(tar\.gz$)|(tar$)
+    regexp: traefik.*\.(tar.gz|tgz|tar)
     endpoint: {{minio_s3_endpoint}}
     bucket: charts
     disable_ssl: true
