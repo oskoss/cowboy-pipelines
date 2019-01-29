@@ -31,6 +31,7 @@ else
   helm_repo_name="ciHelmRepo"
   helm init --client-only --skip-refresh
   helm repo add $helm_repo_name $HELM_REPO_URL
+fi
 
 printf "Chart Values: \n $CHART_VALUES"
 
