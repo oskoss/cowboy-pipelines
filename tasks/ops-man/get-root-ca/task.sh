@@ -4,7 +4,7 @@ set -eo pipefail
 
 printf "Getting Root CA from $OPSMAN_DOMAIN_OR_IP_ADDRESS"
 
-echo `om-linux \
+echo -ne `om-linux \
   --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
   --skip-ssl-validation \
   --username "$OPS_MGR_USR" \
