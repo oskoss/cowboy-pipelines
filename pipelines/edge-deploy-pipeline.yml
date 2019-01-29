@@ -144,19 +144,19 @@ resources:
 - name: bootstrap-kafka-image
   type: docker-image
   source:
-    repository: {{bootstrap_kafka_image}}
+    repository: {{bootstrap_bitnami_kafka_image}}
     tag: {{kafka_image_tag}}
     insecure_registries: [{{bootstrap_insecure_reg}}]
 - name: bootstrap-zookeeper-image
   type: docker-image
   source:
-    repository: {{bootstrap_zookeeper_image}}
+    repository: {{bootstrap_bitnami_zookeeper_image}}
     tag: {{zookeeper_image_tag}}
     insecure_registries: [{{bootstrap_insecure_reg}}]
 - name: bootstrap-cassandra-image
   type: docker-image
   source:
-    repository: {{bootstrap_cassandra_image}}
+    repository: {{bootstrap_bitnami_cassandra_image}}
     tag: {{cassandra_image_tag}}
     insecure_registries: [{{bootstrap_insecure_reg}}]
 - name: harbor-concourse-image
@@ -218,20 +218,20 @@ resources:
 - name: harbor-kafka-image
   type: docker-image
   source:
-    repository: {{harbor_kafka_image}}
-    tag: {{kafka_image_tag}}
+    repository: {{harbor_bitnami_kafka_image}}
+    tag: {{bitnami_kafka_image_tag}}
     insecure_registries: [{{harbor_insecure_reg}}]
 - name: harbor-zookeeper-image
   type: docker-image
   source:
-    repository: {{harbor_zookeeper_image}}
-    tag: {{zookeeper_image_tag}}
+    repository: {{harbor_bitnami_zookeeper_image}}
+    tag: {{bitnami_zookeeper_image_tag}}
     insecure_registries: [{{harbor_insecure_reg}}]
 - name: harbor-cassandra-image
   type: docker-image
   source:
-    repository: {{harbor_cassandra_image}}
-    tag: {{cassandra_image_tag}}
+    repository: {{harbor_bitnami_cassandra_image}}
+    tag: {{bitnami_cassandra_image_tag}}
     insecure_registries: [{{harbor_insecure_reg}}]
 jobs:
 - name: deploy-pivotal-ops-manager-ova
