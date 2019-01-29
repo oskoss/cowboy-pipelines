@@ -38,3 +38,7 @@ do
     fi
     sleep 30
 done
+
+pks cluster $CLUSTER_NAME
+
+printf "PLEASE SETUP DNS AND/OR LOAD BALANCERS TO POINT TO K8S MASTERS!!!!!!"

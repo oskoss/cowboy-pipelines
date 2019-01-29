@@ -691,6 +691,7 @@ jobs:
           load: bootstrap-cassandra-image
 - name: sync-postgresql-helm-chart
   plan:
+      - get: cowboy-pipelines
       - get: chart-tar
         resource: postgresql-helm-chart
       - get: bootstrap-ci-image
