@@ -40,7 +40,7 @@ if [ -z $DNS_IP ]; then
   exit 0
 else
   resolvedIp=$(host "$DNS_HOSTNAME" "$DNS_SERVER_IP" | sed -n -e 's/^.*has address //p')
-  if [ resolvedIp -eq $DNS_IP ]; then 
+  if [ $resolvedIp -eq $DNS_IP ]; then 
     printf "Success :)"
     exit 0
   else
