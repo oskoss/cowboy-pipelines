@@ -10,5 +10,5 @@ echo `om-linux \
   --username "$OPS_MGR_USR" \
   --password "$OPS_MGR_PWD" \
   --format json \
-  certificate-authorities | jq ".[0].cert_pem"` > cert/root_ca.cert
+  certificate-authorities | jq ".[0].cert_pem"` > ca-cert/root_ca.cert
 

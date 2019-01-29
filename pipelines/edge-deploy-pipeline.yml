@@ -857,6 +857,13 @@ jobs:
     params:
       TILLER_IMAGE: {{harbor_tiller_image}}
       TILLER_IMAGE_TAG: {{tiller_image_tag}}
+  - task: get-harbor-ca
+    image: bootstrap-ci-image
+    file: cowboy-pipelines/tasks/ops-man/get-root-ca/task.yml
+    params: 
+      OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
+      OPS_MGR_USR: {{platform_username}}
+      OPS_MGR_PWD: {{platform_password}}
   - task: install-traefik-ingress-controller
     image: bootstrap-ci-image
     file: cowboy-pipelines/tasks/k8s/install-helm-chart/task.yml

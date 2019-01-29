@@ -19,7 +19,11 @@ kubectl create namespace $RELEASE_NAME || true
 kubectl config set-context $currentContext --namespace=$NAMESPACE
 kubectl config use-context $currentContext
 
-
+if [ -d "ca-cert" ]
+then
+  cert_file=`ls -1A ca-cert | sort -n | head -1`
+  cert_options=" --ca-file ca-cert/$cert_file "
+fi
 
 if [ -z "$HELM_REPO_URL" ]
 then
@@ -30,7 +34,7 @@ else
   printf "Helm Repo specified as $HELM_REPO_URL adding repo"
   helm_repo_name="ciHelmRepo"
   helm init --client-only --skip-refresh
-  helm repo add $helm_repo_name $HELM_REPO_URL
+  helm repo add $cert_options $helm_repo_name $HELM_REPO_URL
 fi
 
 printf "Chart Values: \n $CHART_VALUES"

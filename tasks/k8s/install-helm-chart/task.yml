@@ -14,10 +14,13 @@ params:
   CHART_VALUES:
   NAMESPACE:
   HELM_REPO_URL:
+  HELM_REPO_CA:
 
 inputs:
   - name: cowboy-pipelines
   - name: kube-config
+  - name: ca-cert
+    optional: true
   
 run:
   path: cowboy-pipelines/tasks/k8s/install-helm-chart/task.sh

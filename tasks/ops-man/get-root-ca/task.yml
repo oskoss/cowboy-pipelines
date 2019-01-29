@@ -11,7 +11,7 @@ inputs:
   - name: cowboy-pipelines
 
 outputs:
-  - name: cert
+  - name: ca-cert
   
 params:
   OPSMAN_DOMAIN_OR_IP_ADDRESS:
