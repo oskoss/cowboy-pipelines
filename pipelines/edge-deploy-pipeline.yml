@@ -179,18 +179,24 @@ resources:
 - name: harbor-kafka-image
   type: docker-image
   source:
+    username: admin
+    password: {{platform_password}}
     repository: {{harbor_bitnami_kafka_image}}
     tag: {{bitnami_kafka_image_tag}}
     insecure_registries: [{{harbor_insecure_reg}}]
 - name: harbor-zookeeper-image
   type: docker-image
   source:
+    username: admin
+    password: {{platform_password}}
     repository: {{harbor_bitnami_zookeeper_image}}
     tag: {{bitnami_zookeeper_image_tag}}
     insecure_registries: [{{harbor_insecure_reg}}]
 - name: harbor-cassandra-image
   type: docker-image
   source:
+    username: admin
+    password: {{platform_password}}
     repository: {{harbor_bitnami_cassandra_image}}
     tag: {{bitnami_cassandra_image_tag}}
     insecure_registries: [{{harbor_insecure_reg}}]
