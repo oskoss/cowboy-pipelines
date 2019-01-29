@@ -446,7 +446,7 @@ jobs:
     - get: cowboy-pipelines
   - task: upload-stemcell
     image: bootstrap-ci-image
-    file: cowboy-pipelines/tasks/upload-pivotal-stemcell/task.yml
+    file: cowboy-pipelines/tasks/ops-man/upload-pivotal-stemcell/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_CLIENT_ID: {{opsman_client_id}}
