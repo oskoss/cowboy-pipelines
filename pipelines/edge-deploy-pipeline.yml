@@ -31,7 +31,7 @@ resources:
 - name: pivotal-container-service
   type: s3
   source:
-    regexp: pivotal-container-service-1.2.4-build.6.pivotal
+    regexp: (.*)1.2.4-build.6.pivotal
     endpoint: {{minio_s3_endpoint}}
     bucket: pivotal-container-service
     disable_ssl: true
@@ -45,14 +45,14 @@ resources:
 - name: xenial-97.39
   type: s3
   source:
-    regexp: bosh-stemcell-97.39-vsphere-esxi-ubuntu-xenial-go_agent.tgz
+    regexp: (.*)97.39-vsphere-esxi-ubuntu-xenial-go_agent.tgz
     endpoint: {{minio_s3_endpoint}}
     bucket: xenial-stemcells
     disable_ssl: true
 - name: helm-chart-tars
   type: s3
   source:
-    regexp: (.*)
+    regexp: .*\.(tgz$)|(tar\.gz$)
     endpoint: {{minio_s3_endpoint}}
     bucket: charts
     disable_ssl: true
@@ -60,10 +60,6 @@ resources:
   type: git
   source:
     uri: {{ci_tasks_git_endpoint}}
-- name: charts
-  type: git
-  source:
-    uri: {{charts_git_endpoint}}
 - name: bootstrap-ci-image
   type: docker-image
   source:
@@ -756,7 +752,6 @@ jobs:
       passed: [deploy-k8s-cluster]
       trigger: true
     - get: cowboy-pipelines
-    - get: charts
   - task: authenticate-pks
     image: bootstrap-ci-image
     file: cowboy-pipelines/tasks/pks/authenticate-pks/task.yml
