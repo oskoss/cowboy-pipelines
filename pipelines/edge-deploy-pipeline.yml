@@ -853,7 +853,7 @@ jobs:
     file: cowboy-pipelines/tasks/k8s/create-vsphere-default-storage-class/task.yml
   - task: setup-tiller-for-helm
     image: bootstrap-ci-image
-    file: cowboy-pipelines/tasks/setup-tiller/task.yml
+    file: cowboy-pipelines/tasks/k8s/setup-tiller/task.yml
     params:
       TILLER_IMAGE: {{harbor_tiller_image}}
       TILLER_IMAGE_TAG: {{tiller_image_tag}}
