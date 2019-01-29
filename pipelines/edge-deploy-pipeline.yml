@@ -145,19 +145,19 @@ resources:
   type: docker-image
   source:
     repository: {{bootstrap_bitnami_kafka_image}}
-    tag: {{kafka_image_tag}}
+    tag: {{bitnami_kafka_image_tag}}
     insecure_registries: [{{bootstrap_insecure_reg}}]
 - name: bootstrap-zookeeper-image
   type: docker-image
   source:
     repository: {{bootstrap_bitnami_zookeeper_image}}
-    tag: {{zookeeper_image_tag}}
+    tag: {{bitnami_zookeeper_image_tag}}
     insecure_registries: [{{bootstrap_insecure_reg}}]
 - name: bootstrap-cassandra-image
   type: docker-image
   source:
     repository: {{bootstrap_bitnami_cassandra_image}}
-    tag: {{cassandra_image_tag}}
+    tag: {{bitnami_cassandra_image_tag}}
     insecure_registries: [{{bootstrap_insecure_reg}}]
 - name: harbor-concourse-image
   type: docker-image
