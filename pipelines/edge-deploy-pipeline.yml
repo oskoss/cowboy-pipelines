@@ -456,7 +456,7 @@ jobs:
       FULL_STEMCELL_NAME: "bosh-stemcell-97.39-vsphere-esxi-ubuntu-xenial-go_agent.tgz"
   - task: apply-changes
     image: bootstrap-ci-image
-    file: cowboy-pipelines/tasks/apply-changes-pivotal-ops-manager/task.yml
+    file: cowboy-pipelines/tasks/ops-man/apply-changes-pivotal-ops-manager/task.yml
     params:
       OPSMAN_DOMAIN_OR_IP_ADDRESS: {{opsman_domain_or_ip_address}}
       OPSMAN_CLIENT_ID: {{opsman_client_id}}
