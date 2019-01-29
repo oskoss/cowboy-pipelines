@@ -13,6 +13,7 @@ params:
   HARBOR_FQDN:
   HARBOR_USERNAME:
   HARBOR_PASSWORD:
+  TAR_FILENAME:
   
 inputs:
   - name: cowboy-pipelines
