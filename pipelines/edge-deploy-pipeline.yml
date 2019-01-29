@@ -14,6 +14,12 @@ groups:
   - deploy-pks-&-harbor-tiles
   - set-dns
   - sync-images
+  - sync-postgresql-helm-chart
+  - sync-concourse-helm-chart
+  - sync-traefik-helm-chart
+  - sync-kafka-helm-chart
+  - sync-cassandra-helm-chart
+  - sync-postgresql-zookeeper-chart
   - create-pks-admin-user
 - name: Control Kubernetes Cluster
   jobs:
@@ -49,10 +55,45 @@ resources:
     endpoint: {{minio_s3_endpoint}}
     bucket: xenial-stemcells
     disable_ssl: true
-- name: helm-chart-tars
+- name: postgresql-helm-chart
   type: s3
   source:
-    regexp: .*\.(tgz$)|(tar\.gz$)
+    regexp: postgresql(.*)
+    endpoint: {{minio_s3_endpoint}}
+    bucket: charts
+    disable_ssl: true
+- name: zookeeper-helm-chart
+  type: s3
+  source:
+    regexp: zookeeper(.*)
+    endpoint: {{minio_s3_endpoint}}
+    bucket: charts
+    disable_ssl: true
+- name: cassandra-helm-chart
+  type: s3
+  source:
+    regexp: cassandra(.*)
+    endpoint: {{minio_s3_endpoint}}
+    bucket: charts
+    disable_ssl: true
+- name: kafka-helm-chart
+  type: s3
+  source:
+    regexp: kafka(.*)
+    endpoint: {{minio_s3_endpoint}}
+    bucket: charts
+    disable_ssl: true
+- name: concourse-helm-chart
+  type: s3
+  source:
+    regexp: concourse(.*)
+    endpoint: {{minio_s3_endpoint}}
+    bucket: charts
+    disable_ssl: true
+- name: traefik-helm-chart
+  type: s3
+  source:
+    regexp: traefik(.*)
     endpoint: {{minio_s3_endpoint}}
     bucket: charts
     disable_ssl: true
@@ -648,9 +689,13 @@ jobs:
       - put: harbor-cassandra-image
         params:
           load: bootstrap-cassandra-image
-    - get: chart-tar
-      resource: helm-chart-tars
-    - aggregate:
+- name: sync-postgresql-helm-chart
+  plan:
+      - get: chart-tar
+        resource: postgresql-helm-chart
+      - get: bootstrap-ci-image
+        passed: [sync-images]
+        trigger: true
       - task: harbor-upload-postgresql-chart
         image: bootstrap-ci-image
         file: cowboy-pipelines/tasks/harbor/upload-helm-chart/task.yml
@@ -660,6 +705,13 @@ jobs:
           HARBOR_USERNAME: admin
           HARBOR_PASSWORD: {{platform_password}}
           TAR_FILENAME: postgresql-0.13.1.tar
+- name: sync-concourse-helm-chart
+  plan:
+      - get: chart-tar
+        resource: concourse-helm-chart
+      - get: bootstrap-ci-image
+        passed: [sync-images]
+        trigger: true
       - task: harbor-upload-concourse-chart
         image: bootstrap-ci-image
         file: cowboy-pipelines/tasks/harbor/upload-helm-chart/task.yml
@@ -669,6 +721,13 @@ jobs:
           HARBOR_USERNAME: admin
           HARBOR_PASSWORD: {{platform_password}}
           TAR_FILENAME: concourse-3.7.1.tgz
+- name: sync-traefik-helm-chart
+  plan:
+      - get: chart-tar
+        resource: traefik-helm-chart
+      - get: bootstrap-ci-image
+        passed: [sync-images]
+        trigger: true
       - task: harbor-upload-traefik-chart
         image: bootstrap-ci-image
         file: cowboy-pipelines/tasks/harbor/upload-helm-chart/task.yml
@@ -678,6 +737,13 @@ jobs:
           HARBOR_USERNAME: admin
           HARBOR_PASSWORD: {{platform_password}}
           TAR_FILENAME: traefik-1.59.2.tgz
+- name: sync-kafka-helm-chart
+  plan:
+      - get: chart-tar
+        resource: kafka-helm-chart
+      - get: bootstrap-ci-image
+        passed: [sync-images]
+        trigger: true
       - task: harbor-upload-kafka-chart
         image: bootstrap-ci-image
         file: cowboy-pipelines/tasks/harbor/upload-helm-chart/task.yml
@@ -687,6 +753,13 @@ jobs:
           HARBOR_USERNAME: admin
           HARBOR_PASSWORD: {{platform_password}}
           TAR_FILENAME: kafka-1.2.6.tgz
+- name: sync-postgresql-zookeeper-chart
+  plan:
+      - get: chart-tar
+        resource: zookeeper-helm-chart
+      - get: bootstrap-ci-image
+        passed: [sync-images]
+        trigger: true
       - task: harbor-upload-zookeeper-chart
         image: bootstrap-ci-image
         file: cowboy-pipelines/tasks/harbor/upload-helm-chart/task.yml
@@ -696,6 +769,13 @@ jobs:
           HARBOR_USERNAME: admin
           HARBOR_PASSWORD: {{platform_password}}
           TAR_FILENAME: zookeeper-1.2.1.tgz
+- name: sync-cassandra-helm-chart
+  plan:
+      - get: chart-tar
+        resource: cassandra-helm-chart
+      - get: bootstrap-ci-image
+        passed: [sync-images]
+        trigger: true
       - task: harbor-upload-cassandra-chart
         image: bootstrap-ci-image
         file: cowboy-pipelines/tasks/harbor/upload-helm-chart/task.yml
