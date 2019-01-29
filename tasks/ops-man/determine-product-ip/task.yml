@@ -23,4 +23,4 @@ outputs:
   - name: product-ip
 
 run:
-  path: cowboy-pipelines/tasks/util/determine-product-ip/task.sh
+  path: cowboy-pipelines/tasks/ops-man/determine-product-ip/task.sh
