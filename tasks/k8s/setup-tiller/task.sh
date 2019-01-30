@@ -48,7 +48,7 @@ else
 fi
 
 helm init --service-account tiller \
---tiller-image $TILLER_IMAGE
+--tiller-image $TILLER_IMAGE --skip-refresh
 
 set +eo pipefail
 printf "Checking to see if Tiller is ready:"
