@@ -90,14 +90,14 @@ printf "\nCreating gogs DB if not already exists\n" >>$STATE
 
 docker run \
 -e "PGPASSWORD=c1oudc0w" \
-postgres \
+postgres:11.1 \
 sh -c "psql -h $IP --username=vcap postgres -c 'CREATE DATABASE gogs'"  >>$STATE
 
 printf "\nCreating atc DB for concourse if not already exists\n" >>$STATE
 
 docker run \
 -e "PGPASSWORD=c1oudc0w" \
-postgres \
+postgres:11.1 \
 sh -c "psql -h $IP --username=vcap postgres -c 'CREATE DATABASE atc'" >>$STATE
 
 # Setup Gogs Git
