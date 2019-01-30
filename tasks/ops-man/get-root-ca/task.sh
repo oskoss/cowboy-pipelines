@@ -4,9 +4,13 @@ set -eo pipefail
 
 printf "Getting Root CA from $OPSMAN_DOMAIN_OR_IP_ADDRESS"
 
-cert=`om -t https://opsman2.pcf.cloud.oskoss.com -k  --client-id "${OPSMAN_CLIENT_ID}"   --client-secret ""   -u "admin"   -p "Luxola50\!" certificate-authorities -f json | jq -r ".[0].cert_pem"` 
-
-
-
+cert=`om-linux \
+  --target https://$OPSMAN_DOMAIN_OR_IP_ADDRESS \
+  --skip-ssl-validation \
+  --username "$OPS_MGR_USR" \
+  --password "$OPS_MGR_PWD" \
+  --format json \
+  certificate-authorities | jq -r ".[0].cert_pem"` 
+  
 echo $cert > ca-cert/root_ca.cert
 
