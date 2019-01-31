@@ -5,8 +5,8 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: oskoss/cowboy-pipelines
-    tag: 0.1
+    repository: govau/fly-cli
+    tag: latest
 
 params:
   CONCOURSE_URL:
