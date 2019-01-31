@@ -27,7 +27,9 @@ jobs:
 - name: upload-to-opsman
   plan:
     - get: pivotal-container-service
+      resource: pivotal-product
     - get: xenial-97.43
+      resource: pivotal-stemcell
     - get: cowboy-pipelines
     - get: bootstrap-ci-image
     - aggregate:
