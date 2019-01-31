@@ -10,6 +10,5 @@ om-linux \
   --username "${OPSMAN_USERNAME}" \
   --password "${OPSMAN_PASSWORD}" \
   --request-timeout 9900 \
-  --connect-timeout 9900 \
   apply-changes \
   --ignore-warnings
