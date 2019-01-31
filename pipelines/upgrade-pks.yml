@@ -29,6 +29,7 @@ jobs:
     - get: pivotal-container-service
     - get: xenial-97.43
     - get: cowboy-pipelines
+    - get: bootstrap-ci-image
     - aggregate:
       - task: upload-pivotal-container-service
         image: bootstrap-ci-image
