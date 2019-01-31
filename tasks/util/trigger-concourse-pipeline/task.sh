@@ -2,10 +2,10 @@
 
 set -eo pipefail
 
-export https_proxy=internet.proxy.fedex.com:3128
-export http_proxy=internet.proxy.fedex.com:3128
+export https_proxy=199.82.243.100:3128
+export http_proxy=199.82.243.100:3128
 
-wget https://github.com/concourse/concourse/releases/download/v4.2.2/fly_linux_amd64 -O fly
+wget --no-check-certificate https://192.30.253.112/concourse/concourse/releases/download/v4.2.2/fly_linux_amd64 -O fly
 
 export HOME=/root
 printf "Logging into Concourse $CONCOURSE_URL"
