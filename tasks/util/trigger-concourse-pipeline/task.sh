@@ -23,5 +23,6 @@ jobs=($jobs_string)
 
 for elem in "${jobs[@]}"
 do 
+sleep 10s
 ./fly -t local watch -j $CONCOURSE_PIPELINE/$elem
 done
