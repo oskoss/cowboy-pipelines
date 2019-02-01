@@ -17,7 +17,7 @@ printf "Triggering Pipeline $CONCOURSE_PIPELINE and Job $CONCOURSE_JOB"
 
 ./fly -t local trigger-job -j $CONCOURSE_PIPELINE/$CONCOURSE_JOB 
 
-pipeline_config=$(fly -t local jobs -p $CONCOURSE_PIPELINE --json)
+pipeline_config=$(./fly -t local jobs -p $CONCOURSE_PIPELINE --json)
 jobs_string=$(echo $pipeline_config | jq -r .[].name)
 jobs=($jobs_string)
 
