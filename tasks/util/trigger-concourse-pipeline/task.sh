@@ -15,7 +15,7 @@ printf "Unpausing Pipeline $CONCOURSE_PIPELINE"
 ./fly -t local unpause-pipeline -p $CONCOURSE_PIPELINE
 printf "Triggering Pipeline $CONCOURSE_PIPELINE and Job $CONCOURSE_JOB"
 
-fly -t local trigger-job -j $CONCOURSE_PIPELINE/$CONCOURSE_JOB 
+./fly -t local trigger-job -j $CONCOURSE_PIPELINE/$CONCOURSE_JOB 
 
 pipeline_config=$(fly -t local jobs -p $CONCOURSE_PIPELINE --json)
 jobs_string=$(echo $pipeline_config | jq -r .[].name)
@@ -23,5 +23,5 @@ jobs=($jobs_string)
 
 for elem in "${jobs[@]}"
 do 
-fly -t local watch -j $CONCOURSE_PIPELINE/$elem
+./fly -t local watch -j $CONCOURSE_PIPELINE/$elem
 done
