@@ -36,7 +36,7 @@ while [ $? -ne 0 ]; do
   host "$cluster_fqdn" "$DNS_SERVER_IP"
 done
 
-resolved_ips=$(host "$cluster_fqdn" "$DNS_SERVER_IP" | sed -n -e 's/^.*has address //p')
+resolved_ips=($(host "$cluster_fqdn" "$DNS_SERVER_IP" | sed -n -e 's/^.*has address //p'))
 for cluster_ip in "${cluster_ips[@]}"
 do
     for resolved_ip in "${resolved_ips[@]}"
