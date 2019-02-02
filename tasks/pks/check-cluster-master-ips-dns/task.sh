@@ -2,6 +2,11 @@
 
 set -eo pipefail
 
+mkdir -p ~/.pks/
+mkdir -p ~/.kube/
+
+cp pks-config/creds.yml ~/.pks/creds.yml 
+
 cluster_fqdn=$(pks cluster $CLUSTER_NAME --json | jq -r '.parameters.kubernetes_master_host')
 cluster_ips_string=$(pks cluster $CLUSTER_NAME --json | jq -r '.kubernetes_master_ips[]')
 cluster_ips=($cluster_ips_string)
