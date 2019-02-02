@@ -36,15 +36,22 @@ while [ $? -ne 0 ]; do
   host "$cluster_fqdn" "$DNS_SERVER_IP"
 done
 
-resolvedIp=$(host "$cluster_fqdn" "$DNS_SERVER_IP" | sed -n -e 's/^.*has address //p')
-for ip in "${cluster_ips[@]}"
+resolved_ips=$(host "$cluster_fqdn" "$DNS_SERVER_IP" | sed -n -e 's/^.*has address //p')
+for cluster_ip in "${cluster_ips[@]}"
 do
-    if [ "$ip" == "$resolvedIp" ] ; then
-        printf "Success :)"
-        exit 0
-    fi
+    for resolved_ip in "${resolved_ips[@]}"
+    do
+      if [ "$cluster_ip" == "$resolved_ip" ] ; then
+          printf "Success :)"
+          exit 0
+      fi
+    done
 done
 
 printf "FAILED"
-printf "\nDNS Server $DNS_SERVER_IP resolved $cluster_fqdn to $resolvedIp but this is not ${cluster_ips[@]} Bailing out...."
+printf "\nDNS Server $DNS_SERVER_IP resolved $cluster_fqdn to "
+printf '%s,' "${resolved_ips[@]}"
+printf " but this is not one of "
+printf '%s,' "${cluster_ips[@]}"
+printf " defined from \"pks cluster $CLUSTER_NAME\" Bailing out...."
 exit 1
