@@ -23,7 +23,7 @@ groups:
   - create-pks-admin-user
 - name: Control Kubernetes Cluster
   jobs:
-  - deploy-k8s-cluster
+  - create-control-k8s-cluster
   - set-control-cluster-dns
   - bootstrap-cluster
   
@@ -242,6 +242,7 @@ resources:
     repository: {{harbor_bitnami_cassandra_image}}
     tag: {{bitnami_cassandra_image_tag}}
     insecure_registries: [{{harbor_insecure_reg}}]
+    
 jobs:
 - name: deploy-pivotal-ops-manager-ova
   plan:
@@ -810,7 +811,7 @@ jobs:
         PKS_CLI_USEREMAIL: "no-reply@pivotal.io"
         PKS_CLI_PASSWORD: {{platform_password}}
         PKS_UAA_FQDN: {{pks_api_fqdn}}
-- name: deploy-k8s-cluster
+- name: create-control-k8s-cluster
   plan:
     - aggregate:
       - get: bootstrap-ci-image
@@ -835,7 +836,7 @@ jobs:
   plan:
   - aggregate:
     - get: bootstrap-ci-image
-      passed: [deploy-pks-&-harbor-tiles]
+      passed: [create-control-k8s-cluster]
       trigger: true
     - get: cowboy-pipelines
   - task: authenticate-pks
@@ -855,7 +856,7 @@ jobs:
   plan:
   - aggregate:
     - get: bootstrap-ci-image
-      passed: [deploy-k8s-cluster]
+      passed: [set-control-cluster-dns]
     - get: cowboy-pipelines
   - task: authenticate-pks
     image: bootstrap-ci-image
