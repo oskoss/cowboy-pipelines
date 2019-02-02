@@ -12,7 +12,7 @@ groups:
   - upload-config-pivotal-container-service
   - upload-config-harbor
   - deploy-pks-&-harbor-tiles
-  - set-dns
+  - set-pks-harbor-dns
   - sync-images
   - sync-postgresql-helm-chart
   - sync-concourse-helm-chart
@@ -24,6 +24,7 @@ groups:
 - name: Control Kubernetes Cluster
   jobs:
   - deploy-k8s-cluster
+  - set-control-cluster-dns
   - bootstrap-cluster
   
 resources:
@@ -445,7 +446,7 @@ jobs:
       OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPS_MGR_USR: {{platform_username}}
       OPS_MGR_PWD: {{platform_password}}
-  - task: config-tile
+  - task: config-tile 
     image: bootstrap-ci-image
     file: cowboy-pipelines/tasks/harbor/config-pivotal-harbor/task.yml
     params:
@@ -510,7 +511,7 @@ jobs:
       OPSMAN_CLIENT_SECRET: {{opsman_client_secret}}
       OPSMAN_USERNAME: {{platform_username}}
       OPSMAN_PASSWORD: {{platform_password}}
-- name: set-dns
+- name: set-pks-harbor-dns
   plan:
   - aggregate:
     - get: bootstrap-ci-image
@@ -554,7 +555,7 @@ jobs:
     - aggregate:
       - get: cowboy-pipelines
       - get: bootstrap-ci-image
-        passed: [set-dns]
+        passed: [set-pks-harbor-dns]
         trigger: true
         params:
           save: true
@@ -795,7 +796,7 @@ jobs:
   plan:
     - aggregate:
       - get: bootstrap-ci-image
-        passed: [set-dns]
+        passed: [set-pks-harbor-dns]
         trigger: true
       - get: cowboy-pipelines
     - task: authenticate-pks
@@ -830,6 +831,26 @@ jobs:
         CLUSTER_NAME: control-cluster
         CLUSTER_PLAN: {{control-k8s-cluster-pks-plan}}
         CLUSTER_FQDN: {{control-k8s-cluster-FQDN}}
+- name: set-control-cluster-dns
+  plan:
+  - aggregate:
+    - get: bootstrap-ci-image
+      passed: [deploy-pks-&-harbor-tiles]
+      trigger: true
+    - get: cowboy-pipelines
+  - task: authenticate-pks
+    image: bootstrap-ci-image
+    file: cowboy-pipelines/tasks/pks/authenticate-pks/task.yml
+    params:
+      PKS_API_URL: {{pks_api_fqdn}}
+      PKS_API_USERNAME: {{platform_username}}
+      PKS_API_PASSWORD: {{platform_password}}
+  - task: check-cluster-dns-ips
+    image: bootstrap-ci-image
+    file: cowboy-pipelines/tasks/pks/check-cluster-master-ips-dns/task.yml
+    params:
+      DNS_SERVER_IP: {{management_nw_dns}}
+      CLUSTER_NAME: control-cluster
 - name: bootstrap-cluster
   plan:
   - aggregate:

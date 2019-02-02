@@ -1,0 +1,21 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: oskoss/cowboy-pipelines
+    tag: 0.1
+
+params:
+
+  CLUSTER_NAME:
+  DNS_SERVER_IP:
+
+inputs:
+  - name: cowboy-pipelines
+  - name: pks-config
+
+run:
+  path: cowboy-pipelines/tasks/pks/check-cluster-master-ips-dns/task.sh
