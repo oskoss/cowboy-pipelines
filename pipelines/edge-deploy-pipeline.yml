@@ -857,6 +857,7 @@ jobs:
   - aggregate:
     - get: bootstrap-ci-image
       passed: [set-control-cluster-dns]
+      trigger: true
     - get: cowboy-pipelines
   - task: authenticate-pks
     image: bootstrap-ci-image
