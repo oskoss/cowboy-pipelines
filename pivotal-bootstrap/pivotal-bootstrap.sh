@@ -16,11 +16,19 @@ date +"%m.%d.%Y %T " ; printf "Fetching values"
 vmtoolsd --cmd "info-get guestinfo.ovfenv" > /tmp/ovf_env.xml
 TMPXML='/tmp/ovf_env.xml'
 
-# gathering network values        
-IP=`cat $TMPXML| grep -w ip |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-NETMASK=`cat $TMPXML| grep -w netmask |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-GW=`cat $TMPXML| grep -w gateway |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-DNS=`cat $TMPXML| grep -w dns |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
+function getValue
+{
+    local CMD
+    printf -v CMD '/oe:key="%s" oe:value="([^"]*)"/  && print $1' $1
+    perl -ne "$CMD" < $TMPXML
+}
+
+
+IP=$(getValue ip)
+NETMASK=$(getValue netmask)
+GW=$(getValue gateway)
+DNS=$(getValue dns)
+
 
 # Update network
 printf "\n IP: $IP \n Netmask: $NETMASK \n Gateway: $GW \n DNS: $DNS \n" >>$STATE
@@ -197,43 +205,43 @@ printf "\n   Sleeping...... to let Concourse start up\n" >>$STATE
 sleep 30
 
 # gathering pipeline values        
-VCENTER_USR=`cat $TMPXML| grep -w vcenter_usr |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-VCENTER_PWD=`cat $TMPXML| grep -w vcenter_pwd |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-VCENTER_DATACENTER=`cat $TMPXML| grep -w vcenter_datacenter |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-VCENTER_DATASTORE=`cat $TMPXML| grep -w vcenter_datastore |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-OM_RESOURCE_POOL=`cat $TMPXML| grep -w om_resource_pool |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-VCENTER_HOST=`cat $TMPXML| grep -w vcenter_host |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-OM_IP=`cat $TMPXML| grep -w om_ip |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-OM_SSH_PASSWORD=`cat $TMPXML| grep -w om_ssh_password |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-OM_NTP_SERVERS=`cat $TMPXML| grep -w om_ntp_servers |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-OM_DNS_SERVERS=`cat $TMPXML| grep -w om_dns_servers |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-OM_GATEWAY=`cat $TMPXML| grep -w om_gateway |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-OM_NETMASK=`cat $TMPXML| grep -w om_netmask |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-OM_VM_NETWORK=`cat $TMPXML| grep -w om_vm_network |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-EPHEMERAL_DATASTORE=`cat $TMPXML| grep -w ephemeral_datastore |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-PERSISTENT_DATASTORE=`cat $TMPXML| grep -w persistent_datastore |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-MANAGEMENT_VSPHERE_NETWORK=`cat $TMPXML| grep -w management_vsphere_network |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-MANAGEMENT_NW_CIDR=`cat $TMPXML| grep -w management_nw_cidr |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-MANAGEMENT_EXCLUDED_RANGE=`cat $TMPXML| grep -w management_excluded_range |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-MANAGEMENT_NW_DNS=`cat $TMPXML| grep -w management_nw_dns |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-MANAGEMENT_NW_GATEWAY=`cat $TMPXML| grep -w management_nw_gateway |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-WORKLOAD_VSPHERE_NETWORK=`cat $TMPXML| grep -w workload_vsphere_network |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-WORKLOAD_NW_CIDR=`cat $TMPXML| grep -w workload_nw_cidr |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-WORKLOAD_EXCLUDED_RANGE=`cat $TMPXML| grep -w workload_excluded_range |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-WORKLOAD_NW_DNS=`cat $TMPXML| grep -w workload_nw_dns |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-WORKLOAD_NW_GATEWAY=`cat $TMPXML| grep -w workload_nw_gateway |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-AZ_1_CLUSTER_NAME=`cat $TMPXML| grep -w az_1_cluster_name |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-AZ_1_RP_NAME=`cat $TMPXML| grep -w az_1_rp_name |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-AZ_2_CLUSTER_NAME=`cat $TMPXML| grep -w az_2_cluster_name |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-AZ_2_RP_NAME=`cat $TMPXML| grep -w az_2_rp_name |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-AZ_3_CLUSTER_NAME=`cat $TMPXML| grep -w az_3_cluster_name |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-AZ_3_RP_NAME=`cat $TMPXML| grep -w az_3_rp_name |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-NTP_SERVERS=`cat $TMPXML| grep -w ntp_servers |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-PKS_API_FQDN=`cat $TMPXML| grep -w pks_api_fqdn |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-VRLI_FQDN=`cat $TMPXML| grep -w vrli_fqdn |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-PKS_VRLI_ENABLED=`cat $TMPXML| grep -w pks_vrli_enabled |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'|tr '[:upper:]' '[:lower:]'`
-HARBOR_FQDN=`cat $TMPXML| grep -w harbor_fqdn |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
-CONTROL_CLUSTER_FQDN=`cat $TMPXML| grep -w control_cluster_fqdn |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
+VCENTER_USR=$(getValue vcenter_usr)
+VCENTER_PWD=$(getValue vcenter_pwd)
+VCENTER_DATACENTER=$(getValue vcenter_datacenter)
+VCENTER_DATASTORE=$(getValue vcenter_datastore)
+OM_RESOURCE_POOL=$(getValue om_resource_pool)
+VCENTER_HOST=$(getValue vcenter_host)
+OM_IP=$(getValue om_ip)
+OM_SSH_PASSWORD=$(getValue om_ssh_password)
+OM_NTP_SERVERS=$(getValue om_ntp_servers)
+OM_DNS_SERVERS=$(getValue om_dns_servers)
+OM_GATEWAY=$(getValue om_gateway)
+OM_NETMASK=$(getValue om_netmask)
+OM_VM_NETWORK=$(getValue om_vm_network)
+EPHEMERAL_DATASTORE=$(getValue ephemeral_datastore)
+PERSISTENT_DATASTORE=$(getValue persistent_datastore)
+MANAGEMENT_VSPHERE_NETWORK=$(getValue management_vsphere_network)
+MANAGEMENT_NW_CIDR=$(getValue management_nw_cidr)
+MANAGEMENT_EXCLUDED_RANGE=$(getValue management_excluded_range)
+MANAGEMENT_NW_DNS=$(getValue management_nw_dns)
+MANAGEMENT_NW_GATEWAY=$(getValue management_nw_gateway)
+WORKLOAD_VSPHERE_NETWORK=$(getValue workload_vsphere_network)
+WORKLOAD_NW_CIDR=$(getValue workload_nw_cidr)
+WORKLOAD_EXCLUDED_RANGE=$(getValue workload_excluded_range)
+WORKLOAD_NW_DNS=$(getValue workload_nw_dns)
+WORKLOAD_NW_GATEWAY=$(getValue workload_nw_gateway)
+AZ_1_CLUSTER_NAME=$(getValue az_1_cluster_name)
+AZ_1_RP_NAME=$(getValue az_1_rp_name)
+AZ_2_CLUSTER_NAME=$(getValue az_2_cluster_name)
+AZ_2_RP_NAME=$(getValue az_2_rp_name)
+AZ_3_CLUSTER_NAME=$(getValue az_3_cluster_name)
+AZ_3_RP_NAME=$(getValue az_3_rp_name)
+NTP_SERVERS=$(getValue ntp_servers)
+PKS_API_FQDN=$(getValue pks_api_fqdn)
+VRLI_FQDN=$(getValue vrli_fqdn)
+PKS_VRLI_ENABLED=$(getValue pks_vrli_enabled |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'|tr '[:upper:]' '[:lower:]')
+HARBOR_FQDN=$(getValue harbor_fqdn)
+CONTROL_CLUSTER_FQDN=$(getValue control_cluster_fqdn)
 
 cat << EOF > /data/pipelines/cowboy-pipelines/pipelines/edge-deploy-params.yaml
 vcenter_usr: "$VCENTER_USR"
@@ -387,7 +395,7 @@ export HOME=/root
 fly -t local login --concourse-url http://127.0.0.1:8080 -u vcap -p c1oudc0w >>$STATE 2>&1
 
 # Determine if Pipeline should be reset
-RESET_PIPELINE=`cat $TMPXML| grep -w reset_pipeline |sed -n -e '/value\=/ s/.*\=\" *//p'|sed 's/\"\/>//'`
+RESET_PIPELINE=$(getValue reset_pipeline)
 printf "\n   Reset Pipeline Status: $RESET_PIPELINE\n" >>$STATE
 
 if [ "$RESET_PIPELINE" = "True" ]; then
